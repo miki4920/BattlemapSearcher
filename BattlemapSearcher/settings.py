@@ -77,17 +77,18 @@ WSGI_APPLICATION = 'BattlemapSearcher.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'battlemaps',
+        'USER': 'mg448',
+        'PASSWORD': '12345678',
+        'HOST': 'localhost',
+        'PORT': '3306'
+
     }
 }
-
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
 }
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = 50242880
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
