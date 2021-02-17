@@ -1,11 +1,12 @@
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
 
 from .csrf import CsrfExemptSessionAuthentication
-from .models import Map
+from .models import Map, Tag
+from .verificators import get_map_dictionary
+from .errors import *
 
 
 class MapUpload(APIView):
@@ -13,11 +14,23 @@ class MapUpload(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
     def post(self, request):
-        name = request.data['name']
-        extension = request.data['extension']
-        picture = request.data['picture']
-        uploader = request.data['uploader']
-        map_model = Map.objects.create_map(name=name, extension=extension, picture=picture, uploader=uploader)
+        try:
+            map_dictionary = get_map_dictionary(request.data)
+        except VerificationError as e:
+            response = Response(status=400)
+            response.content = str(e)
+            return response
+
+        map_model = Map.objects.create_map(map_dictionary=map_dictionary)
         map_model.save()
+        # cave = list(Map.objects.filter(tags__name="cave"))
+        for tag in map_dictionary["tags"]:
+            if Tag.objects.filter(name=tag).count() == 0:
+                tag = Tag.objects.create_tag(tag_name=tag)
+                tag.save()
+                map_model.tags.add(tag)
+            else:
+                tag = Tag.objects.filter(name=tag)[0]
+                map_model.tags.add(tag)
         return Response(status=201)
 
