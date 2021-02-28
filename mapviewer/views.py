@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -23,7 +24,6 @@ class MapUpload(APIView):
 
         map_model = Map.objects.create_map(map_dictionary=map_dictionary)
         map_model.save()
-        # cave = list(Map.objects.filter(tags__name="cave"))
         for tag in map_dictionary["tags"]:
             if Tag.objects.filter(name=tag).count() == 0:
                 tag = Tag.objects.create_tag(tag_name=tag)
@@ -34,3 +34,8 @@ class MapUpload(APIView):
                 map_model.tags.add(tag)
         return Response(status=201)
 
+
+def index(request):
+    cave = list(Map.objects.filter(tags__name="forest"))
+    context = {"maps": cave}
+    return render(request, 'mapviewer/mapviewer.html', context)
