@@ -3,10 +3,16 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'mapviewer/style.css' %}">
 </head>
-
-    {% for map in maps %}
-    <div class="square">
-        <a href=/{{map.picture}} target="_blank"><img src=/{{map.picture}} alt="map"></a>
+<body>
+<div class="maps">
+{% for map in maps %}
+    <div class="map">
+        <a href=/{{map.picture}} target="_blank">
+            <div class="box"><img src=/{{map.thumbnail}} alt="map"></div>
+        </a>
     </div>
-    {% endfor %}
+{% endfor %}
+</div>
+</body>
+
 </html>

@@ -8,10 +8,11 @@ from .csrf import CsrfExemptSessionAuthentication
 from .models import Map, Tag
 from .verificators import get_map_dictionary
 from .errors import *
+from random import choice
 
 
 class MapUpload(APIView):
-    parser_classes = (MultiPartParser, FormParser, )
+    parser_classes = (MultiPartParser, FormParser,)
     authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
     def post(self, request):
@@ -36,6 +37,7 @@ class MapUpload(APIView):
 
 
 def index(request):
-    cave = list(Map.objects.filter(tags__name="forest"))
-    context = {"maps": cave}
+    maps = list(Map.objects.all())
+    maps = [choice(maps) for _ in range(0, 50)]
+    context = {"maps": maps}
     return render(request, 'mapviewer/mapviewer.html', context)
