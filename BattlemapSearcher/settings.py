@@ -23,8 +23,8 @@ SECRET_KEY = '*p6yt)t$=2@z3o7wxs@ca!(w&+hzkryfr+z!$6pc*5hwr5j^$#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-MEDIA_URL = '/maps/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'maps')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
 
 ALLOWED_HOSTS = []
