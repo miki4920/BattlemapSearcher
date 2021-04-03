@@ -8,7 +8,8 @@ from .csrf import CsrfExemptSessionAuthentication
 from .models import Map, Tag
 from .verificators import get_map_dictionary
 from .errors import *
-from random import choice
+from .forms import SearchForm
+from random import shuffle
 
 
 class MapUpload(APIView):
@@ -37,7 +38,14 @@ class MapUpload(APIView):
 
 
 def index(request):
-    maps = list(Map.objects.all())
-    maps = [choice(maps) for _ in range(0, 50)]
-    context = {"maps": maps}
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            tag = form.cleaned_data["tag"]
+            maps = list(Map.objects.filter(tags__name=tag))
+    else:
+        maps = list(Map.objects.all())
+        shuffle(maps)
+        form = SearchForm()
+    context = {"maps": maps, "form": form}
     return render(request, 'mapviewer/mapviewer.html', context)

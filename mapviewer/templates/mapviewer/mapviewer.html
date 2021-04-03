@@ -4,6 +4,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'mapviewer/style.css' %}">
 </head>
 <body>
+<form action="/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="login"/>
+</form>
 <div class="maps">
 {% for map in maps %}
     <div class="map">
