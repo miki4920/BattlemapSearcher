@@ -12,9 +12,17 @@
 <div class="maps">
 {% for map in maps %}
     <div class="map">
+
+        <div class="box">
+
         <a href=/media/{{map.picture}} target="_blank">
-            <div class="box"><img src=/media/{{map.thumbnail}} alt="map"></div>
+            <div class="blur">
+                <img src=/media/{{map.thumbnail}} alt="map">
+                <p class="desc">{{map.name}}</p>
+            </div>
         </a>
+        </div>
+
     </div>
 {% endfor %}
 </div>

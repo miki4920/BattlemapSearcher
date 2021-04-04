@@ -1,59 +1,83 @@
-.maps {
-    display: flex;
-    flex-wrap: wrap;
+body {
+  background-color: rgb(18, 18, 18);
+}
+
+* {
+  box-sizing: border-box;
 }
 
 .map {
-    overflow: hidden;
-    flex: 1 0 20%;
-    max-width: 20%;
+  padding: 4px 4px;
+  float: left;
+  width: 12.49999%;
+  opacity
+}
+
+@media only screen and (max-width: 1600px) {
+  .map {
+    width: 24.99999%;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .map {
+    width: 49.99999%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .map {
     width: 100%;
-    padding: 6px;
-    height: 400px;
-    display: flex;
-    box-sizing: border-box;
-}
-
-.map a {
-    flex: auto;
-    max-width: 100%;
-    background-color: rgba(255, 255, 255, 0.11);
-    padding: 8px;
-    border-radius: 5px;
-    text-decoration: inherit;
-    color: inherit;
-    transition: .1s ease-in;
-    border: 2px rgba(255, 255, 255, 0.0) solid;
+  }
 }
 
 
-.map a:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-    border: 2px rgba(255, 255, 255, 0.15) solid;
+.box {
+  background-color: rgba(255, 255, 255, 0.05);
+  width: 100%;
+  height: auto;
+  padding: 8px;
 }
 
-.map a:hover .box img {
-    filter: blur(2px);
+.box:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  transition: .3s ease-in;
 }
 
-.map a:hover .box div {
-    opacity: 1;
+a {
+    color: black;
 }
 
-.map .box {
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    display: flex;
-    margin: auto;
-    width: 100%;
-    height: 100%;
-    position: relative;
+.blur {
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
 }
 
-.map a .box img {
-    transition: .1s ease-in;
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
+img {
+  width: 100%;
+  height: auto;
+}
+
+.box:hover img{
+  filter: blur(5px);
+  opacity: 0.2;
+  transition: .3s ease-in;
+}
+
+.desc {
+    position: absolute;
+        z-index: 999;
+        margin: 8px 8px;
+        left: 0;
+        right: 0;
+        top: 0%;
+        text-align: left;
+        width: 50%;
+        opacity: 0;
+}
+
+.box:hover .desc{
+  opacity: 1;
+  transition: .3s ease-in;
 }

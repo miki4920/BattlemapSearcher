@@ -48,4 +48,4 @@ def index(request):
         shuffle(maps)
         form = SearchForm()
     context = {"maps": maps, "form": form}
-    return render(request, 'mapviewer/mapviewer.html', context)
+    return render(request, 'mapviewer/viewer.html', context)

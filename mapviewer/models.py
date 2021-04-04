@@ -77,9 +77,7 @@ class Map(models.Model):
         elif thumb_extension == '.png':
             FTYPE = 'PNG'
         else:
-            return False  # Unrecognized file type
-
-        # Save thumbnail to in-memory file as StringIO
+            return False
         temp_thumb = BytesIO()
         image.save(temp_thumb, FTYPE)
         temp_thumb.seek(0)
