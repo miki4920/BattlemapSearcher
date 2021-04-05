@@ -57,13 +57,13 @@ class Map(models.Model):
     objects = MapManager()
 
     def save(self, *args, **kwargs):
-        if not self.make_thumbnail():
-            raise Exception('Could not create thumbnail - is the file type valid?')
+        self.make_thumbnail()
+        self.make_name()
         super(Map, self).save(*args, **kwargs)
 
     def make_thumbnail(self):
-        if "maps/" in self.picture.name:
-            return True
+        if self.thumbnail:
+            return
         image = Image.open(self.picture)
         image = image.resize((CONFIG.THUMBNAIL_SIZE, CONFIG.THUMBNAIL_SIZE), Image.ANTIALIAS)
 
@@ -83,8 +83,12 @@ class Map(models.Model):
         temp_thumb.seek(0)
         self.thumbnail.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
         temp_thumb.close()
-
         return True
+
+    def make_name(self):
+        self.name = self.name.split("_")
+        self.name = " ".join(self.name)
+        self.name = self.name.capitalize()
 
     @classmethod
     def create(cls, map_dictionary):

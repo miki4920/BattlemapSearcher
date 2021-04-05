@@ -46,7 +46,7 @@ def get_map_dictionary(data):
 
     image_data = Image.open(picture)
     width, height = image_data.size
-    square_width, square_height = data["square_width"], data["square_height"]
+    square_width, square_height = data.get("square_width"), data.get("square_height")
     tags = data.get("tags")
     if not tags:
         tags = []
