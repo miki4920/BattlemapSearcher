@@ -1,10 +1,14 @@
-import os
-from io import BytesIO
+import re
 
 from django.core.files.base import ContentFile
 from django.db import models
-from .config import CONFIG
+from io import BytesIO
 from PIL import Image
+
+from .config import CONFIG
+from .errors import *
+from .hash import hash_picture, hash_distance
+from .config import CONFIG
 
 
 class TagManager(models.Manager):
@@ -14,8 +18,7 @@ class TagManager(models.Manager):
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=50)
-
+    name = models.CharField(max_length=CONFIG.MAXIMUM_NAME_LENGTH)
     objects = TagManager()
 
     @classmethod
@@ -27,80 +30,144 @@ class Tag(models.Model):
         return self.name
 
 
+def process_name(name):
+    if re.match(r'[^a-zA-Z0-9_]', name):
+        raise NameNotAlphanumerical(name)
+    if not CONFIG.MINIMUM_NAME_LENGTH < len(name) < CONFIG.MAXIMUM_NAME_LENGTH:
+        raise NameNotInRange(name)
+    name = name.split("_")
+    name = [word.capitalize() for word in name]
+    name = " ".join(name)
+    return name
+
+
+def process_extension(extension):
+    extension = extension.lower()
+    if extension not in CONFIG.IMAGE_EXTENSIONS:
+        raise ExtensionNotAccepted(extension)
+    return extension
+
+
+def process_picture(picture):
+    if not CONFIG.MINIMUM_PICTURE_SIZE < len(picture) < CONFIG.MAXIMUM_PICTURE_SIZE:
+        raise PictureNotInRange(picture)
+    return picture
+
+
+def process_hash(picture, name):
+    picture_hash = hash_picture(picture)
+    map_hashes = Map.objects.all().values("hash")
+    for map_hash in map_hashes:
+        if hash_distance(picture_hash, map_hash["hash"]) <= CONFIG.IMAGE_SIMILARITY:
+            raise HashNotUnique(name)
+    return picture_hash
+
+
+def process_thumbnail(picture):
+    thumbnail = Image.open(picture)
+    thumbnail = thumbnail.resize((CONFIG.THUMBNAIL_SIZE, CONFIG.THUMBNAIL_SIZE), Image.ANTIALIAS)
+    return thumbnail
+
+
+def process_dimensions(picture):
+    picture = Image.open(picture)
+    width, height = picture.size
+    if CONFIG.MINIMUM_IMAGE_WIDTH > width or CONFIG.MINIMUM_IMAGE_HEIGHT > height:
+        raise DimensionsNotInRange(width, height)
+    return width, height
+
+
+def process_square_dimensions(square_width, square_height):
+    if (not square_width and square_height) or (square_width and not square_height):
+        raise SquareDimensionsNotAccepted(square_width, square_height)
+    if not (square_width or square_height):
+        raise SquareDimensionsNotInRange(square_width, square_height)
+    if not (square_width.isdigit() or square_height.isdigit()):
+        raise SquareDimensionsNotInRange(square_width, square_height)
+    return square_width, square_height
+
+
+def process_uploader(uploader):
+    if re.match(r'[^a-zA-Z_]', uploader):
+        raise UploaderNotAlphanumerical(uploader)
+    if not CONFIG.MINIMUM_NAME_LENGTH < len(uploader) < CONFIG.MAXIMUM_NAME_LENGTH:
+        raise UploaderNotInRange(uploader)
+    uploader = uploader.split("_")
+    uploader = [word.capitalize() for word in uploader]
+    uploader = " ".join(uploader)
+    return uploader
+
+
+def attach_thumbnail(name, extension, thumbnail, battlemap):
+    if extension == "jpg":
+        extension = "JPEG"
+    else:
+        extension = "PNG"
+    thumbnail_io = BytesIO()
+    thumbnail.save(thumbnail_io, extension, quality=60)
+    battlemap.thumbnail.save(name, ContentFile(thumbnail_io.getvalue()), save=False)
+
+
+def process_tags(tags):
+    if tags:
+        if re.match(r'^(([a-zA-Z_]{3,}),?)+$', tags):
+            tags = tags.split(",")
+        else:
+            raise TagsNotAccepted(tags)
+    else:
+        tags = []
+    return tags
+
+
 class MapManager(models.Manager):
-    def create_map(self, map_dictionary):
-        name = map_dictionary["name"]
-        extension = map_dictionary["extension"]
-        picture = map_dictionary["picture"]
-        uploader = map_dictionary["uploader"]
-        width = map_dictionary["width"]
-        height = map_dictionary["height"]
-        square_width = map_dictionary["square_width"]
-        square_height = map_dictionary["square_height"]
-        battlemap = self.create(name=name, extension=extension, picture=picture, uploader=uploader, width=width,
-                                height=height, square_width=square_width, square_height=square_height)
-        return battlemap
+    def create_map(self, data):
+        name = data.get("name")
+        name = process_name(name)
+
+        extension = data.get("extension")
+        extension = process_extension(extension)
+
+        picture = data.get("picture")
+        picture = process_picture(picture)
+
+        picture_hash = process_hash(picture, name)
+
+        thumbnail = process_thumbnail(picture)
+
+        width, height = process_dimensions(picture)
+
+        square_width, square_height = data.get("square_width"), data.get("square_height")
+        square_width, square_height = process_square_dimensions(square_width, square_height)
+
+        uploader = data.get("uploader")
+        uploader = process_uploader(uploader)
+        battlemap = self.create(name=name, extension=extension, picture=picture, hash=picture_hash,
+                                width=width, height=height, square_width=square_width, square_height=square_height,
+                                uploader=uploader)
+        attach_thumbnail(name, extension, thumbnail, battlemap)
+        tags = data.get("tags")
+        tags = process_tags(tags)
+        for tag in tags:
+            if Tag.objects.filter(name=tag).count() == 0:
+                tag = Tag.objects.create_tag(tag_name=tag)
+                tag.save()
+                battlemap.tags.add(tag)
+            else:
+                tag = Tag.objects.filter(name=tag)[0]
+                battlemap.tags.add(tag)
+        battlemap.save()
 
 
 class Map(models.Model):
-    name = models.CharField(max_length=CONFIG.NAME_LENGTH)
+    name = models.CharField(max_length=CONFIG.MAXIMUM_NAME_LENGTH)
     extension = models.CharField(max_length=3)
     picture = models.ImageField(upload_to=CONFIG.UPLOAD_DIRECTORY)
+    hash = models.CharField(max_length=16)
     thumbnail = models.ImageField(upload_to=CONFIG.THUMBNAIL_DIRECTORY)
-    uploader = models.CharField(max_length=CONFIG.NAME_LENGTH)
     width = models.IntegerField()
     height = models.IntegerField()
     square_width = models.IntegerField(null=True)
     square_height = models.IntegerField(null=True)
+    uploader = models.CharField(max_length=CONFIG.MAXIMUM_NAME_LENGTH)
     tags = models.ManyToManyField(Tag)
-
     objects = MapManager()
-
-    def save(self, *args, **kwargs):
-        self.make_thumbnail()
-        self.make_name()
-        super(Map, self).save(*args, **kwargs)
-
-    def make_thumbnail(self):
-        if self.thumbnail:
-            return
-        image = Image.open(self.picture)
-        image = image.resize((CONFIG.THUMBNAIL_SIZE, CONFIG.THUMBNAIL_SIZE), Image.ANTIALIAS)
-
-        thumb_name, thumb_extension = os.path.splitext(self.picture.name)
-        thumb_extension = thumb_extension.lower()
-
-        thumb_filename = thumb_name + '_thumb' + thumb_extension
-
-        if thumb_extension == '.jpg':
-            FTYPE = 'JPEG'
-        elif thumb_extension == '.png':
-            FTYPE = 'PNG'
-        else:
-            return False
-        temp_thumb = BytesIO()
-        image.save(temp_thumb, FTYPE)
-        temp_thumb.seek(0)
-        self.thumbnail.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
-        temp_thumb.close()
-        return True
-
-    def make_name(self):
-        self.name = self.name.split("_")
-        self.name = " ".join(self.name)
-        self.name = self.name.capitalize()
-
-    @classmethod
-    def create(cls, map_dictionary):
-        name = map_dictionary["name"]
-        extension = map_dictionary["extension"]
-        picture = map_dictionary["picture"]
-        uploader = map_dictionary["uploader"]
-        width = map_dictionary["width"]
-        height = map_dictionary["height"]
-        square_width = map_dictionary["square_width"]
-        square_height = map_dictionary["square_height"]
-
-        battlemap = cls(name=name, extension=extension, picture=picture, uploader=uploader, width=width,
-                        height=height, square_width=square_width, square_height=square_height)
-        return battlemap
