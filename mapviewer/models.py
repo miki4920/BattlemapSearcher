@@ -80,9 +80,7 @@ def process_dimensions(picture):
 def process_square_dimensions(square_width, square_height):
     if (not square_width and square_height) or (square_width and not square_height):
         raise SquareDimensionsNotAccepted(square_width, square_height)
-    if not (square_width or square_height):
-        raise SquareDimensionsNotInRange(square_width, square_height)
-    if not (square_width.isdigit() or square_height.isdigit()):
+    if not ((square_width is None and square_height is None) or (square_width.isdigit() and square_height.isdigit())):
         raise SquareDimensionsNotInRange(square_width, square_height)
     return square_width, square_height
 
