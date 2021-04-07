@@ -66,15 +66,17 @@ img {
 }
 
 .desc {
+    color: rgba(255, 255, 255, 0.87);
     position: absolute;
-        z-index: 999;
-        margin: 8px 8px;
-        left: 0;
-        right: 0;
-        top: 0%;
-        text-align: left;
-        width: 50%;
-        opacity: 0;
+    z-index: 999;
+    margin: 0px 0px;
+    left: 0;
+    right: 0;
+    top: 0%;
+    text-align: left;
+    width: 100%;
+    opacity: 0;
+    padding: 4px 4px;
 }
 
 .box:hover .desc{

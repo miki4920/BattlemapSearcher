@@ -12,13 +12,18 @@
 <div class="maps">
 {% for map in maps %}
     <div class="map">
-
         <div class="box">
-
         <a href=/media/{{map.picture}} target="_blank">
             <div class="blur">
                 <img src=/media/{{map.thumbnail}} alt="map">
-                <p class="desc">{{map.name}}</p>
+                <p class="desc">Title: {{map.name}}<br>
+                                {% if map.square_width %}Square Width: {{map.square_width}}
+                                {% else %}Width: {{map.width}}{% endif %}<br>
+                                {% if map.square_height %}Square Height: {{map.square_height}}
+                                {% else %}Height: {{map.height}}{% endif %}<br>
+                                Uploader: {{map.uploader}}<br>
+                                Tags: {% for tag in map.tags.all|dictsort:"name" %}{{tag.name|title}}, {% endfor %}</p>
+
             </div>
         </a>
         </div>
