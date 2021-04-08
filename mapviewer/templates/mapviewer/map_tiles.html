@@ -1,9 +1,5 @@
-<html>
-<head>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'mapviewer/style.css' %}">
-</head>
-<body>
+{% extends "mapviewer/base.html" %}
+{% block content %}
 <form action="/" method="post">
     {% csrf_token %}
     {{ form }}
@@ -13,7 +9,7 @@
 {% for map in maps %}
     <div class="map">
         <div class="box">
-        <a href=/media/{{map.picture}} target="_blank">
+        <a href='{% url "mapviewer:map_tile" map.id %}' target="_blank">
             <div class="blur">
                 <img src=/media/{{map.thumbnail}} alt="map">
                 <p class="desc">Title: {{map.name}}<br>
@@ -31,6 +27,4 @@
     </div>
 {% endfor %}
 </div>
-</body>
-
-</html>
+{% endblock %}

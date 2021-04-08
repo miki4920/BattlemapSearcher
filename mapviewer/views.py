@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -26,7 +26,7 @@ class MapUpload(APIView):
         return Response(status=201)
 
 
-def index(request):
+def map_tiles(request):
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -37,4 +37,10 @@ def index(request):
         shuffle(maps)
         form = SearchForm()
     context = {"maps": maps, "form": form}
-    return render(request, 'mapviewer/viewer.html', context)
+    return render(request, 'mapviewer/map_tiles.html', context)
+
+
+def map_tile(request, map_id):
+    map_tile = get_object_or_404(Map, id=map_id)
+    context = {"map": map_tile}
+    return render(request, 'mapviewer/map_tile.html', context)
