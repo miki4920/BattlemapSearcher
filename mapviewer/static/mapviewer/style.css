@@ -10,7 +10,6 @@ body {
   padding: 4px 4px;
   float: left;
   width: 12.49999%;
-  opacity
 }
 
 @media only screen and (max-width: 1600px) {
@@ -37,10 +36,11 @@ body {
   width: 100%;
   height: auto;
   padding: 8px;
+  border-radius: 4px;
 }
 
 .box:hover {
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.11);
   transition: .3s ease-in;
 }
 
@@ -60,21 +60,9 @@ a {
   height: auto;
 }
 
-.tile {
-  background-color: red;
-  width: 100%;
-  padding-top: 56.25% /* 1:1 Aspect Ratio */
-  position: relative; /* If you want text inside of it */
-}
-
-.tile img {
-
-
-}
-
 .box:hover img{
-  filter: blur(5px);
-  opacity: 0.2;
+  filter: blur(3px);
+  opacity: 0.3;
   transition: .3s ease-in;
 }
 
@@ -92,7 +80,30 @@ a {
     padding: 4px 4px;
 }
 
+.box button {
+    color: rgba(255, 255, 255, 0.87);
+    border: none;
+    background-color: rgba(255, 255, 255, 0.09);
+    border-radius: 4px;
+    width: 49%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.box button:focus {
+    outline: none;
+}
+
 .box:hover .desc{
   opacity: 1;
   transition: .3s ease-in;
+}
+
+.box:hover button{
+  opacity: 1;
+  transition: .3s ease-in;
+}
+
+.box button:hover {
+  background-color: rgba(255, 255, 255, 0.16);
 }

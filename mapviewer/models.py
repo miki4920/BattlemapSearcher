@@ -57,6 +57,10 @@ def process_picture(picture):
 def process_hash(picture, name):
     picture_hash = hash_picture(picture)
     map_hashes = Map.objects.all().values("hash")
+    map_blacklist_hashes = MapBlacklist.objects.all().values("hash")
+    for map_hash in map_blacklist_hashes:
+        if picture_hash == map_hash["hash"]:
+            raise HashNotAccepted(name)
     for map_hash in map_hashes:
         if hash_distance(picture_hash, map_hash["hash"]) <= CONFIG.IMAGE_SIMILARITY:
             raise HashNotUnique(name)
@@ -169,3 +173,14 @@ class Map(models.Model):
     uploader = models.CharField(max_length=CONFIG.MAXIMUM_NAME_LENGTH)
     tags = models.ManyToManyField(Tag)
     objects = MapManager()
+
+
+class MapBlacklistManager(models.Manager):
+    def create_map_black_list(self, map_hash):
+        map_black_list = self.create(hash=map_hash)
+        map_black_list.save()
+
+
+class MapBlacklist(models.Model):
+    hash = models.CharField(max_length=16)
+    objects = MapBlacklistManager()

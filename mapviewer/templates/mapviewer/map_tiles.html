@@ -7,10 +7,10 @@
 </form>
 <div class="maps">
 {% for map in maps %}
-    <div class="map">
+    <div class="map" id="{{map.id}}">
         <div class="box">
-        <a href='{% url "mapviewer:map_tile" map.id %}' target="_blank">
-            <div class="blur">
+        <div class="blur">
+        <a href=/media/{{map.picture}}>
                 <img src=/media/{{map.thumbnail}} alt="map">
                 <p class="desc">Title: {{map.name}}<br>
                                 {% if map.square_width %}Square Width: {{map.square_width}}
@@ -19,12 +19,15 @@
                                 {% else %}Height: {{map.height}}{% endif %}<br>
                                 Uploader: {{map.uploader}}<br>
                                 Tags: {% for tag in map.tags.all|dictsort:"name" %}{{tag.name|title}}, {% endfor %}</p>
-
-            </div>
         </a>
+        <button type="submit" onclick="send_request(this, {{map.id}})" id="download">Download</button>
+        <button type="submit" onclick="send_request(this, {{map.id}})" id="delete">Delete</button>
+            <div id="response"></div>
         </div>
-
+        </div>
     </div>
 {% endfor %}
 </div>
+{% load static %}
+<script src="{% static 'mapviewer/map_tiles.js' %}"></script>
 {% endblock %}

@@ -30,43 +30,49 @@ class PictureNotInRange(VerificationError):
         super().__init__(self.message)
 
 
+class HashNotAccepted(VerificationError):
+    def __init__(self, name):
+        self.message = f"04:Map Picture is blacklisted:{name}"
+        super().__init__(self.message)
+
+
 class HashNotUnique(VerificationError):
     def __init__(self, name):
-        self.message = f"04:Map Picture is already in the database:{name}"
+        self.message = f"05:Map Picture is already in the database:{name}"
         super().__init__(self.message)
 
 
 class DimensionsNotInRange(VerificationError):
     def __init__(self, width, height):
-        self.message = f"05:Map Picture has wrong dimensions:{width},{height}"
+        self.message = f"06:Map Picture has wrong dimensions:{width},{height}"
         super().__init__(self.message)
 
 
 class SquareDimensionsNotAccepted(VerificationError):
     def __init__(self, square_width, square_height):
-        self.message = f"06:Map Picture is missing one of the square dimensions:{square_width},{square_height}"
+        self.message = f"07:Map Picture is missing one of the square dimensions:{square_width},{square_height}"
         super().__init__(self.message)
 
 
 class SquareDimensionsNotInRange(VerificationError):
     def __init__(self, square_width, square_height):
-        self.message = f"07:One of the square dimensions is not an Integer or Null:{square_width},{square_height}"
+        self.message = f"08:One of the square dimensions is not an Integer or Null:{square_width},{square_height}"
         super().__init__(self.message)
 
 
 class UploaderNotAlphanumerical(VerificationError):
     def __init__(self, uploader):
-        self.message = f"08:Map Uploader contains non-alphanumerical characters:{uploader}"
+        self.message = f"09:Map Uploader contains non-alphanumerical characters:{uploader}"
         super().__init__(self.message)
 
 
 class UploaderNotInRange(VerificationError):
     def __init__(self, uploader):
-        self.message = f"09:Map Uploader has wrong length:{uploader}"
+        self.message = f"10:Map Uploader has wrong length:{uploader}"
         super().__init__(self.message)
 
 
 class TagsNotAccepted(VerificationError):
     def __init__(self, tags):
-        self.message = f"09:Map Tags are in a wrong format:{tags}"
+        self.message = f"11:Map Tags are in a wrong format:{tags}"
         super().__init__(self.message)
