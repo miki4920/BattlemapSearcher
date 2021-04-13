@@ -1,17 +1,13 @@
+<html>
 <head>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'mapviewer/style.css' %}">
     <link rel="icon" type="image/png" href="{% static 'mapviewer/favicon.ico' %}"/>
 </head>
 <body>
-<div id="searchbar">
-    <div class="background">
-    <input type="text" placeholder="Search...">
-    </div>
-</div>
-
 {% block content %}
 
 {% endblock %}
 <script src="{% static 'mapviewer/base.js' %}"></script>
 </body>
+</html>

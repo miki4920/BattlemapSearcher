@@ -32,7 +32,7 @@ def map_tiles(request):
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
-            tag = form.cleaned_data["tag"]
+            tag = form.cleaned_data["text"]
             maps = list(Map.objects.filter(tags__name=tag))
     else:
         maps = list(Map.objects.all())

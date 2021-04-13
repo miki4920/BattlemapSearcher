@@ -1,9 +1,5 @@
 from django import forms
-from .models import Tag
 
 
 class SearchForm(forms.Form):
-    choices = list(Tag.objects.all())
-    choices = [(choice.name, choice.name.capitalize()) for choice in choices]
-    choices = sorted(choices)
-    tag = forms.CharField(widget=forms.Select(choices=choices))
+    text = forms.CharField(label="", help_text="", widget=forms.TextInput(attrs={'placeholder': 'Search...', 'autocomplete': 'off'}))

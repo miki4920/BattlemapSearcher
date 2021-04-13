@@ -1,6 +1,14 @@
 {% extends "mapviewer/base.html" %}
 {% block content %}
 <div class="maps">
+<div id="searchbar">
+    <div class="background">
+    <form action="" method="post">
+    {% csrf_token %}
+    {{form}}
+    </form>
+    </div>
+</div>
 {% for map in maps %}
     <div class="map" id="{{map.id}}">
         <div class="box">
@@ -26,3 +34,4 @@
 {% load static %}
 <script src="{% static 'mapviewer/map_tiles.js' %}"></script>
 {% endblock %}
+
