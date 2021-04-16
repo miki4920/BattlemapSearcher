@@ -22,13 +22,13 @@ function send_request(element, map_id) {
         a.download = filename ;
         a.click();
 	    }
-        xhttp.open("GET", "map/"+map_id, true);
+        xhttp.open("GET", "maps/"+map_id, true);
         xhttp.responseType = 'blob'
         xhttp.send();
     }
 
     else if (request_type === "delete") {
-        xhttp.open("DELETE", "map/"+map_id, true)
+        xhttp.open("DELETE", "maps/"+map_id, true)
         xhttp.send();
         xhttp.onload =function(){
         if (xhttp.status === 204) {
