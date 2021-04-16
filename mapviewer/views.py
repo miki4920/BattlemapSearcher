@@ -1,31 +1,10 @@
-from django.http import FileResponse, HttpResponse
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.response import Response
-from rest_framework.authentication import BasicAuthentication
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.views import APIView
-
-from .csrf import CsrfExemptSessionAuthentication
 from .models import Map, MapBlacklist
 from .errors import VerificationError
 from .forms import SearchForm
 from random import shuffle
-
-
-class MapUpload(APIView):
-    parser_classes = (MultiPartParser, FormParser,)
-    authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
-
-    @staticmethod
-    def post(request):
-        try:
-            Map.objects.create_map(data=request.data)
-        except VerificationError as e:
-            response = Response(status=400)
-            response.content = str(e)
-            return response
-        return Response(status=201)
 
 
 def map_tiles(request):
@@ -43,19 +22,34 @@ def map_tiles(request):
 
 
 @csrf_exempt
-def request_map(request, map_id):
+def request_map(request, map_id=None):
     if request.method == "GET":
         return get_map(map_id)
+    elif request.method == "POST":
+        return post_map(request)
     elif request.method == "DELETE":
         return delete_map(map_id)
 
 
 def get_map(map_id):
     map_file = get_object_or_404(Map, id=map_id)
-    response = HttpResponse(map_file.picture.read())
+    response = HttpResponse(map_file.picture.read(), status=200)
     extension = "png" if map_file.extension == "png" else "jpeg"
     response['Content-Type'] = f'image/{extension}'
     response['Content-Disposition'] = f'attachment; filename={map_file.name}.{map_file.extension}'
+    return response
+
+
+def post_map(request):
+    try:
+        data = {**request.POST, **request.FILES}
+        for key in data.keys():
+            data[key] = data[key][0]
+        Map.objects.create_map(data=data)
+    except VerificationError as e:
+        response = HttpResponse(status=400, content=str(e), content_type="text/plain")
+        return response
+    response = HttpResponse(status=201)
     return response
 
 
