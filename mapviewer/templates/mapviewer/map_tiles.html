@@ -1,35 +1,37 @@
 {% extends "mapviewer/base.html" %}
 {% block content %}
 <div class="maps">
-<div id="searchbar">
-    <div class="background">
-    <form action="" method="post">
-    {% csrf_token %}
-    {{form}}
-    </form>
+    <div id="searchbar">
+        <div class="background">
+            <form action="" method="post" id="searchform">
+                {% csrf_token %}
+                {{form}}
+                <button type="submit" id="searchicon" class="buttonicon"></button>
+                <button type="submit" id="homeicon" class="buttonicon" onclick="home(this)"></button>
+            </form>
+        </div>
     </div>
-</div>
-{% for map in maps %}
+    {% for map in maps %}
     <div class="map" id="{{map.id}}">
         <div class="box">
-        <div class="blur">
-        <a href=/media/{{map.picture}}>
-                <img src=/media/{{map.thumbnail}} alt="map">
-                <p class="desc">Title: {{map.name}}<br>
-                                {% if map.square_width %}Square Width: {{map.square_width}}
-                                {% else %}Width: {{map.width}}{% endif %}<br>
-                                {% if map.square_height %}Square Height: {{map.square_height}}
-                                {% else %}Height: {{map.height}}{% endif %}<br>
-                                Uploader: {{map.uploader}}<br>
-                                Tags: {% for tag in map.tags.all|dictsort:"name" %}{{tag.name|title}}, {% endfor %}</p>
-        </a>
-        <button type="submit" onclick="send_request(this, {{map.id}})" id="download">Download</button>
-        <button type="submit" onclick="send_request(this, {{map.id}})" id="delete">Delete</button>
-            <div id="response"></div>
-        </div>
+            <div class="blur">
+                <a href=/media/{{map.picture}}>
+                    <img src=/media/{{map.thumbnail}} alt="map">
+                    <p class="desc">Title: {{map.name}}<br>
+                        {% if map.square_width %}Square Width: {{map.square_width}}
+                        {% else %}Width: {{map.width}}{% endif %}<br>
+                        {% if map.square_height %}Square Height: {{map.square_height}}
+                        {% else %}Height: {{map.height}}{% endif %}<br>
+                        Uploader: {{map.uploader}}<br>
+                        Tags: {% for tag in map.tags.all|dictsort:"name" %}{{tag.name|title}}, {% endfor %}</p>
+                </a>
+                <button type="submit" onclick="send_request(this, {{map.id}})" id="download">Download</button>
+                <button type="submit" onclick="send_request(this, {{map.id}})" id="delete">Delete</button>
+                <div id="response"></div>
+            </div>
         </div>
     </div>
-{% endfor %}
+    {% endfor %}
 </div>
 {% load static %}
 <script src="{% static 'mapviewer/map_tiles.js' %}"></script>

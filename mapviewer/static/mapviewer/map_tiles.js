@@ -38,3 +38,10 @@ function send_request(element, map_id) {
         }
     }
 }
+
+function home() {
+    var input = document.getElementById("searchbartext");
+    var form = document.getElementById("searchform");
+    form.method = "GET";
+    form.send();
+}

@@ -1,9 +1,11 @@
+{% load static %}
+
 * {
   box-sizing: border-box;
 }
 
 html,body {
-  margin: 0; padding: 0; height: 100%; width: 100%;
+  margin: 0; padding: 0;
 }
 
 body {
@@ -28,6 +30,7 @@ body {
   padding: 8px;
   border-radius: 8px;
   background-color: rgba(255, 255, 255, 0.05);
+  width: 100%;
 }
 
 .background + .sticky {
@@ -37,10 +40,12 @@ body {
 
 form {
   margin-bottom: 0;
+  display: flex;
 }
 
 #searchbar input{
   width: 100%;
+  display: inline-block;
   font-size: 16px;
   color: rgba(255, 255, 255, 0.87);
   background-color: rgba(255, 255, 255, 0.05);
@@ -49,11 +54,48 @@ form {
   border-bottom: none;
   border-left: none;
   border-right: none;
-  border-radius: 4px;
-  padding: 2px 4px;
+  border-radius: 4px 0px 0px 4px;
+  padding: 2px 8px;
 }
 
 #searchbar input:focus{
+  background-color: rgba(255, 255, 255, 0.11);
+  outline: none;
+}
+
+.buttonicon {
+    padding-top: auto;
+    position: relative;
+    border-top: none;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    width: 1.2%;
+}
+
+#homeicon {
+  background: url("/static/mapviewer/home.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 0px 4px 4px 0px;
+}
+
+#homeicon:focus {
+  background-color: rgba(255, 255, 255, 0.11);
+  outline: none;
+}
+
+#searchicon {
+  background: url("/static/mapviewer/search.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+#searchicon:focus {
   background-color: rgba(255, 255, 255, 0.11);
   outline: none;
 }
@@ -68,19 +110,19 @@ form {
   width: 12.49999%;
 }
 
-@media only screen and (max-width: 1600px) {
+@media screen and (max-width: 1600px) {
   .map {
     width: 24.99999%;
   }
 }
 
-@media only screen and (max-width: 1000px) {
+@media screen and (max-width: 1000px) {
   .map {
     width: 49.99999%;
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
   .map {
     width: 99.99999%;
   }
@@ -89,8 +131,7 @@ form {
 
 .box {
   background-color: rgba(255, 255, 255, 0.05);
-  width: 100%;
-  height: auto;
+  height: 100%;
   padding: 8px;
   border-radius: 8px;
 
@@ -101,14 +142,9 @@ form {
   transition: .3s ease-in;
 }
 
-a {
-    color: black;
-}
-
 .blur {
   overflow: hidden;
   position: relative;
-  display: inline-block;
 }
 
 .box img {

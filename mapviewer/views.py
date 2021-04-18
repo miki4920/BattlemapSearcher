@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from .models import Map, MapBlacklist
@@ -11,8 +12,14 @@ def map_tiles(request):
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
-            tag = form.cleaned_data["text"]
-            maps = list(Map.objects.filter(tags__name=tag))
+            text = form.cleaned_data["text"]
+            lookup = None
+            for word in text:
+                if lookup:
+                    lookup = lookup & (Q(tags__name__contains=word) | Q(name__contains=word))
+                else:
+                    lookup = (Q(tags__name__contains=word) | Q(name__contains=word))
+            maps = list(Map.objects.filter(lookup).distinct())
     else:
         maps = list(Map.objects.all())
         shuffle(maps)
