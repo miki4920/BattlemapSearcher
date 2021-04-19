@@ -40,7 +40,7 @@ body {
 
 form {
   margin-bottom: 0;
-  display: flex;
+  display:flex;
 }
 
 #searchbar input{
@@ -70,7 +70,7 @@ form {
     border-bottom: none;
     border-left: none;
     border-right: none;
-    width: 1.2%;
+    width: 2%;
 }
 
 #homeicon {
@@ -80,6 +80,7 @@ form {
   background-size: contain;
   background-color: rgba(255, 255, 255, 0.05);
   border-radius: 0px 4px 4px 0px;
+
 }
 
 #homeicon:focus {
@@ -116,15 +117,24 @@ form {
   }
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1300px) {
   .map {
     width: 49.99999%;
   }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1000px) {
   .map {
     width: 99.99999%;
+  }
+  .buttonicon {
+    width: 10%;
+  }
+  * {
+    font-size: 48px;
+  }
+  #searchbar input{
+    font-size: 48px;
   }
 }
 

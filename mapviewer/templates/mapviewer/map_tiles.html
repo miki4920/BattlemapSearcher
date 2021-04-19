@@ -7,8 +7,9 @@
                 {% csrf_token %}
                 {{form}}
                 <button type="submit" id="searchicon" class="buttonicon"></button>
-                <button type="submit" id="homeicon" class="buttonicon" onclick="home(this)"></button>
+                <button type="button" id="homeicon" class="buttonicon"></button>
             </form>
+            <form action="" method="get" id="homeform"></form>
         </div>
     </div>
     {% for map in maps %}
