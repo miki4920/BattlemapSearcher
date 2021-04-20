@@ -131,10 +131,13 @@ form {
     width: 10%;
   }
   * {
-    font-size: 48px;
+    font-size: 30px;
   }
   #searchbar input{
     font-size: 48px;
+  }
+  .buttons {
+    padding: 10px 0px 0px 0px;
   }
 }
 
@@ -144,7 +147,6 @@ form {
   height: 100%;
   padding: 8px;
   border-radius: 8px;
-
 }
 
 .box:hover {
@@ -155,6 +157,16 @@ form {
 .blur {
   overflow: hidden;
   position: relative;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+hr {
+  opacity: 0;
 }
 
 .box img {
@@ -189,7 +201,7 @@ form {
     border: none;
     background-color: rgba(255, 255, 255, 0.09);
     border-radius: 4px;
-    width: 49%;
+    width: 32.2%;
     opacity: 0;
     cursor: pointer;
 }

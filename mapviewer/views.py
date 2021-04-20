@@ -1,8 +1,9 @@
+import re
 from django.http import HttpResponse
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from .models import Map, MapBlacklist
+from .models import Map, MapBlacklist, Tag
 from .errors import VerificationError
 from .forms import SearchForm
 from random import shuffle
@@ -16,9 +17,9 @@ def map_tiles(request):
             lookup = None
             for word in text:
                 if lookup:
-                    lookup = lookup & (Q(tags__name__contains=word) | Q(name__contains=word))
+                    lookup = lookup & (Q(tags__name__icontains=word) | Q(name__icontains=word) | Q(uploader__icontains=word))
                 else:
-                    lookup = (Q(tags__name__icontains=word) | Q(name__icontains=word))
+                    lookup = (Q(tags__name__icontains=word) | Q(name__icontains=word) | Q(uploader__icontains=word))
             maps = list(Map.objects.filter(lookup).distinct())
     else:
         maps = list(Map.objects.all())
@@ -34,8 +35,10 @@ def request_map(request, map_id=None):
         return get_map(map_id)
     elif request.method == "POST":
         return post_map(request)
+    elif request.method == "PUT":
+        return put_map(request, map_id)
     elif request.method == "DELETE":
-        return delete_map(map_id)
+        return delete_map(request)
 
 
 def get_map(map_id):
@@ -57,6 +60,32 @@ def post_map(request):
         response = HttpResponse(status=400, content=str(e), content_type="text/plain")
         return response
     response = HttpResponse(status=201)
+    return response
+
+
+def put_map(request, map_id):
+    map_file = get_object_or_404(Map, id=map_id)
+    data = str(request.body).lower()
+    if len(data) > 0:
+        data = data[1:]
+        data = re.sub(r"[^a-zA-Z0-9, ]", "", data)
+        data = re.sub(r" ", ",", data)
+        data = re.sub(r",{2,}", ",", data)
+        tags = sorted(data.split(","))
+        map_file.tags.clear()
+        for tag in tags:
+            if Tag.objects.filter(name=tag).count() == 0:
+                tag = Tag.objects.create_tag(tag_name=tag)
+                tag.save()
+                map_file.tags.add(tag)
+            else:
+                tag = Tag.objects.filter(name=tag)[0]
+                map_file.tags.add(tag)
+        map_file.save()
+        tags = [tag.capitalize() for tag in tags]
+        response = HttpResponse(status=200, content=", ".join(tags)+",")
+    else:
+        response = HttpResponse(status=400, content="Tags cannot be empty", content_type="text/plain")
     return response
 
 

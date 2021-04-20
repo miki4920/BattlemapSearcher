@@ -18,7 +18,7 @@
             <div class="blur">
                 <a href=/media/{{map.picture}}>
                     <img src=/media/{{map.thumbnail}} alt="map">
-                    <p class="desc">Title: {{map.name}}<br>
+                    <p class="desc" id="{{map.id}} desc">Title: {{map.name}}<br>
                         {% if map.square_width %}Square Width: {{map.square_width}}
                         {% else %}Width: {{map.width}}{% endif %}<br>
                         {% if map.square_height %}Square Height: {{map.square_height}}
@@ -26,9 +26,14 @@
                         Uploader: {{map.uploader}}<br>
                         Tags: {% for tag in map.tags.all|dictsort:"name" %}{{tag.name|title}}, {% endfor %}</p>
                 </a>
+                <div class="buttons">
                 <button type="submit" onclick="send_request(this, {{map.id}})" id="download">Download</button>
+                    <hr>
+                <button type="submit" onclick="send_request(this, {{map.id}})" id="tags">Tags</button>
+                    <hr>
                 <button type="submit" onclick="send_request(this, {{map.id}})" id="delete">Delete</button>
                 <div id="response"></div>
+                </div>
             </div>
         </div>
     </div>

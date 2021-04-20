@@ -37,6 +37,24 @@ function send_request(element, map_id) {
             }
         }
     }
+    else if (request_type === "tags") {
+       var tags = prompt("Enter Map Tags", "");
+       var description = null;
+       var index = null;
+       if (!(tags == null || tags == "")) {
+            xhttp.open("PUT", "maps/"+map_id, true)
+            xhttp.send(tags);
+            xhttp.onload =function(){
+            if (xhttp.status === 200) {
+                tags = xhttp.response;
+                description = document.getElementById(map_id + " desc").innerHTML;
+                index = description.search("Tags: ")+6;
+                description = description.substring(0, index) + tags;
+                document.getElementById(map_id + " desc").innerHTML = description;
+            }
+        }
+       }
+    }
 }
 
 $(document).ready(function(){
