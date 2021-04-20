@@ -18,7 +18,7 @@ def map_tiles(request):
                 if lookup:
                     lookup = lookup & (Q(tags__name__contains=word) | Q(name__contains=word))
                 else:
-                    lookup = (Q(tags__name__contains=word) | Q(name__contains=word))
+                    lookup = (Q(tags__name__icontains=word) | Q(name__icontains=word))
             maps = list(Map.objects.filter(lookup).distinct())
     else:
         maps = list(Map.objects.all())
