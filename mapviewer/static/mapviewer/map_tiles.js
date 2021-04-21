@@ -60,6 +60,7 @@ function send_request(element, map_id) {
 $(document).ready(function(){
   $("#homeicon").on('click touchstart', function() {
       var form = document.getElementById("homeform");
+      form.action = "http://192.168.1.129:8000";
       form.submit();
   });
 });

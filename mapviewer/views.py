@@ -5,11 +5,13 @@ from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from .models import Map, MapBlacklist, Tag
 from .errors import VerificationError
-from .forms import SearchForm
-from random import shuffle
+from .forms import SearchForm, PageForm
+from random import randint
+from .config import CONFIG
 
 
-def map_tiles(request):
+def map_tiles(request, page_id=1):
+    page_form = None
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -22,10 +24,18 @@ def map_tiles(request):
                     lookup = (Q(tags__name__icontains=word) | Q(name__icontains=word) | Q(uploader__icontains=word))
             maps = list(Map.objects.filter(lookup).distinct())
     else:
-        maps = list(Map.objects.all())
-        shuffle(maps)
+        page_form = PageForm()
+        if request.GET:
+            page_id = int(request.GET.get("page")[0])
+        if request.session.get('seed'):
+            seed = request.session.get('seed')
+        else:
+            seed = randint(1, 1000)
+            request.session['seed'] = seed
+        request.session.set_expiry(0)
+        maps = list(Map.objects.raw("SELECT * FROM mapviewer_map ORDER BY RAND(%s)" % seed))[0+(CONFIG.MAPS_PER_PAGE*(page_id-1)):CONFIG.MAPS_PER_PAGE*page_id]
         form = SearchForm()
-    context = {"maps": maps, "form": form}
+    context = {"maps": maps, "search_form": form, "page_form": page_form}
     return render(request, 'mapviewer/map_tiles.html', context)
 
 

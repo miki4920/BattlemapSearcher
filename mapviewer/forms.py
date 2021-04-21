@@ -13,3 +13,7 @@ class SearchForm(forms.Form):
         text = re.sub("[^a-zA-Z0-9 \"]", "", text)
         text = text.split(" ")
         cleaned_data["text"] = text
+
+
+class PageForm(forms.Form):
+    page = forms.IntegerField()

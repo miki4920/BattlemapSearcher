@@ -5,7 +5,7 @@
         <div class="background">
             <form action="" method="post" id="searchform">
                 {% csrf_token %}
-                {{form}}
+                {{search_form}}
                 <button type="submit" id="searchicon" class="buttonicon"></button>
                 <button type="button" id="homeicon" class="buttonicon"></button>
             </form>
@@ -38,6 +38,11 @@
         </div>
     </div>
     {% endfor %}
+    <footer>
+        <form action="" method="get" id="pageform">
+            {{page_form}}
+        </form>
+    </footer>
 </div>
 {% load static %}
 <script src="{% static 'mapviewer/map_tiles.js' %}"></script>
