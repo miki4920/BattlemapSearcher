@@ -27,7 +27,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
 
-ALLOWED_HOSTS = ["192.168.1.129"]
+ALLOWED_HOSTS = ["192.168.0.11"]
 
 # Application definition
 

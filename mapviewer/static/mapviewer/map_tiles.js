@@ -57,10 +57,24 @@ function send_request(element, map_id) {
     }
 }
 
+function send_page(increment) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    var form = document.getElementById("pageform");
+    var page = document.getElementById("page_id");
+    var page_id = 1;
+    if (urlParams.has('page')) {
+      page_id = parseInt(urlParams.get('page'));
+    }
+    page_id = page_id + increment;
+    page.value = page_id;
+    form.submit();
+
+}
+
 $(document).ready(function(){
   $("#homeicon").on('click touchstart', function() {
-      var form = document.getElementById("homeform");
-      form.action = "http://192.168.1.129:8000";
+      var form = document.getElementById("serchform");
       form.submit();
   });
 });
