@@ -1,3 +1,4 @@
+import random
 import re
 from django.http import HttpResponse
 from django.db.models import Q
@@ -6,15 +7,30 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Map, MapBlacklist, Tag
 from .errors import VerificationError
 from .forms import SearchForm
-from random import randint
 from .config import CONFIG
 
 
-def map_tiles(request, page_id=1):
+def get_seed(request):
+    if request.session.get('seed'):
+        seed = request.session.get('seed')
+    else:
+        seed = random.randint(1, 1000)
+        request.session['seed'] = seed
+        request.session.set_expiry(0)
+    random.seed(seed)
+
+
+def map_tiles(request):
+    get_seed(request)
+    maps = []
+    count = 0
+    form = SearchForm()
+    page = 1
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
             text = form.cleaned_data["text"]
+            page = form.cleaned_data["page"]
             lookup = None
             for word in text:
                 if lookup:
@@ -22,20 +38,17 @@ def map_tiles(request, page_id=1):
                 else:
                     lookup = (Q(tags__name__icontains=word) | Q(name__icontains=word) | Q(uploader__icontains=word))
             maps = list(Map.objects.filter(lookup).distinct())
+            count = len(maps)
+            maps = maps[0+(CONFIG.MAPS_PER_PAGE*(page-1)):CONFIG.MAPS_PER_PAGE*page]
+            random.shuffle(maps)
     elif request.method == 'GET':
-        if not request.GET.get("page"):
-            page_id = 1
-        else:
-            page_id = int(request.GET.get("page")[0])
-        if request.session.get('seed'):
-            seed = request.session.get('seed')
-        else:
-            seed = randint(1, 1000)
-            request.session['seed'] = seed
-        request.session.set_expiry(0)
-        maps = list(Map.objects.raw("SELECT * FROM mapviewer_map ORDER BY RAND(%s)" % seed))[0+(CONFIG.MAPS_PER_PAGE*(page_id-1)):CONFIG.MAPS_PER_PAGE*page_id]
-        form = SearchForm()
-    context = {"maps": maps, "search_form": form}
+        maps = list(Map.objects.all())
+        count = len(maps)
+        maps = maps[0:CONFIG.MAPS_PER_PAGE]
+        random.shuffle(maps)
+    back = False if page == 1 else True
+    forward = True if CONFIG.MAPS_PER_PAGE*page < count else False
+    context = {"maps": maps, "search_form": form, "back": back, "forward": forward}
     return render(request, 'mapviewer/map_tiles.html', context)
 
 

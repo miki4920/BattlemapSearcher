@@ -60,21 +60,35 @@ function send_request(element, map_id) {
 function send_page(increment) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    var form = document.getElementById("pageform");
+    var form = document.getElementById("searchform");
     var page = document.getElementById("page_id");
     var page_id = 1;
-    if (urlParams.has('page')) {
-      page_id = parseInt(urlParams.get('page'));
+    if (page.value) {
+      page_id = parseInt(page.value);
     }
-    page_id = page_id + increment;
+    page_id = page_id + parseInt(increment);
     page.value = page_id;
     form.submit();
-
 }
 
 $(document).ready(function(){
   $("#homeicon").on('click touchstart', function() {
-      var form = document.getElementById("serchform");
+      var form = document.getElementById("searchform");
+      var search = document.getElementById("searchbartext");
+      search.value = "";
+      var page = document.getElementById("page_id");
+      page.value = 1;
       form.submit();
   });
+});
+
+$('#searchform').submit(function() {
+    var search = document.getElementById("searchbartext");
+    var previous_value = document.getElementById("previous_value");
+    var page = document.getElementById("page_id");
+    if (search != previous_value) {
+        page.value = 1;
+        previous_value = search;
+    }
+    return true; // return false to cancel form action
 });

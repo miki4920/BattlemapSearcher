@@ -6,6 +6,7 @@
             <form action="http://192.168.0.11:8000" method="post" id="searchform">
                 {% csrf_token %}
                 {{search_form}}
+                <input type="hidden" id="previous_value" value="">
                 <button type="submit" id="searchicon" class="buttonicon"></button>
                 <button type="button" id="homeicon" class="buttonicon"></button>
             </form>
@@ -39,11 +40,12 @@
     </div>
     {% endfor %}
     <footer>
-        <form action="" method="get" id="pageform">
-            <input type="hidden" name="page" id="page_id"/>
-            <button type="submit" onclick="send_page(-1)"><</button>
-            <button type="submit" onclick="send_page(1)">></button>
-        </form>
+        {% if back %}
+        <button type="submit" onclick="send_page(-1)"><</button>
+        {% endif %}
+        {% if forward %}
+        <button type="submit" onclick="send_page(1)">></button>
+        {% endif %}
     </footer>
 </div>
 {% load static %}

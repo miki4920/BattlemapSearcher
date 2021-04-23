@@ -9,7 +9,6 @@ app_name = 'mapviewer'
 
 urlpatterns = [
     path('', views.map_tiles, name="map_tiles"),
-    path('<int:page_id>', views.map_tiles, name="map_tiles"),
     path('maps/', views.request_map, name="map_no_parameters"),
     path('maps/<int:map_id>', views.request_map, name="map")]
 
