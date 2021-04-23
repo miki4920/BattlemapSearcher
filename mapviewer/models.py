@@ -54,16 +54,17 @@ def process_picture(picture):
     return picture
 
 
-def process_hash(picture, name):
+def process_hash(picture, name, ignore_hash):
     picture_hash = hash_picture(picture)
     map_hashes = Map.objects.all().values("hash")
     map_blacklist_hashes = MapBlacklist.objects.all().values("hash")
     for map_hash in map_blacklist_hashes:
         if picture_hash == map_hash["hash"]:
             raise HashNotAccepted(name)
-    for map_hash in map_hashes:
-        if hash_distance(picture_hash, map_hash["hash"]) <= CONFIG.IMAGE_SIMILARITY:
-            raise HashNotUnique(name)
+    if not ignore_hash:
+        for map_hash in map_hashes:
+            if hash_distance(picture_hash, map_hash["hash"]) <= CONFIG.IMAGE_SIMILARITY:
+                raise HashNotUnique(name)
     return picture_hash
 
 
@@ -84,6 +85,8 @@ def process_dimensions(picture):
 def process_square_dimensions(square_width, square_height):
     if (not square_width and square_height) or (square_width and not square_height):
         raise SquareDimensionsNotAccepted(square_width, square_height)
+    if (not square_width) and (not square_height):
+        square_width, square_height = None, None
     if not ((square_width is None and square_height is None) or (square_width.isdigit() and square_height.isdigit())):
         raise SquareDimensionsNotInRange(square_width, square_height)
     return square_width, square_height
@@ -112,8 +115,9 @@ def attach_thumbnail(name, extension, thumbnail, battlemap):
 
 def process_tags(tags):
     if tags:
-        if re.match(r'^(([a-zA-Z_]{3,}),?)+$', tags):
+        if re.match(r'^(([a-zA-Z_]{3,})([, ])?)+$', tags):
             tags = tags.split(",")
+            tags = [tag.lower() for tag in tags]
         else:
             raise TagsNotAccepted(tags)
     else:
@@ -131,8 +135,8 @@ class MapManager(models.Manager):
 
         picture = data.get("picture")
         picture = process_picture(picture)
-
-        picture_hash = process_hash(picture, name)
+        ignore_hash = data.get("ignore_hash")
+        picture_hash = process_hash(picture, name, ignore_hash)
 
         thumbnail = process_thumbnail(picture)
 

@@ -61,7 +61,7 @@ def request_map(request, map_id=None):
     elif request.method == "PUT":
         return put_map(request, map_id)
     elif request.method == "DELETE":
-        return delete_map(request)
+        return delete_map(map_id)
 
 
 def get_map(map_id):
