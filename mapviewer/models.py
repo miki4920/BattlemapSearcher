@@ -35,9 +35,15 @@ def process_name(name):
         raise NameNotAlphanumerical(name)
     if not CONFIG.MINIMUM_NAME_LENGTH < len(name) < CONFIG.MAXIMUM_NAME_LENGTH:
         raise NameNotInRange(name)
-    name = name.split("_")
-    name = [word.capitalize() for word in name]
+    name = re.findall('[A-Z][^A-Z]*', name)
+    name_list = []
+    for word in name:
+        word = word.split("_")
+        name_list.extend(word)
+    name = [word.capitalize() for word in name_list]
     name = " ".join(name)
+    name = re.sub(r' +', " ", name)
+    name = re.sub(r'(^ +)|( +$)', "", name)
     return name
 
 
