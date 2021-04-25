@@ -11,6 +11,7 @@ class SearchForm(forms.Form):
         cleaned_data = super().clean()
         text = cleaned_data.get("text")
         text = re.sub("[^a-zA-Z0-9 \"]", "", text)
+        text = text.lower()
         text = text.split(" ")
         cleaned_data["text"] = text
         page = cleaned_data.get("page")

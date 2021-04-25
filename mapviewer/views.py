@@ -1,13 +1,13 @@
 import random
 import re
 from django.http import HttpResponse
-from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from .models import Map, MapBlacklist, Tag
 from .errors import VerificationError
 from .forms import SearchForm
 from .config import CONFIG
+from .utility import get_map_query
 
 
 def get_seed(request):
@@ -31,13 +31,7 @@ def map_tiles(request):
         if form.is_valid():
             text = form.cleaned_data["text"]
             page = form.cleaned_data["page"]
-            lookup = None
-            for word in text:
-                if lookup:
-                    lookup = lookup & (Q(tags__name__icontains=word) | Q(name__icontains=word) | Q(uploader__icontains=word))
-                else:
-                    lookup = (Q(tags__name__icontains=word) | Q(name__icontains=word) | Q(uploader__icontains=word))
-            maps = list(Map.objects.filter(lookup).distinct())
+            maps = get_map_query(text)
             count = len(maps)
             maps = maps[0+(CONFIG.MAPS_PER_PAGE*(page-1)):CONFIG.MAPS_PER_PAGE*page]
             random.shuffle(maps)
