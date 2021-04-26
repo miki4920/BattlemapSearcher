@@ -82,6 +82,15 @@ $(document).ready(function(){
   });
 });
 
+$(document).ready(function(){
+  $("#refreshicon").on('click touchstart', function() {
+      var seed = Math.floor(Math.random() * 1000)+1;
+      document.cookie = "seed="+seed.toString();
+      var form = document.getElementById("searchform");
+      form.submit();
+  });
+});
+
 $('#searchform').submit(function() {
     var search = document.getElementById("searchbartext");
     var previous_value = document.getElementById("previous_value");
@@ -90,5 +99,5 @@ $('#searchform').submit(function() {
         page.value = 1;
         previous_value = search;
     }
-    return true; // return false to cancel form action
+    return true;
 });

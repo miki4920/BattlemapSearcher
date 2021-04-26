@@ -101,6 +101,19 @@ form {
   outline: none;
 }
 
+#refreshicon {
+  background: url("/static/mapviewer/refresh.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+#refreshicon:focus {
+  background-color: rgba(255, 255, 255, 0.11);
+  outline: none;
+}
+
 .maps {
   display: flex;
   flex-wrap: wrap;

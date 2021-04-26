@@ -37,7 +37,7 @@ def get_tag_query(text):
             maps = [map_id[0] for map_id in maps]
             maps = Map.objects.filter(id__in=maps)
         else:
-            maps = Map.objects.none()
+            maps = Map.objects.none()   
     else:
         maps = Map.objects.all()
     return maps

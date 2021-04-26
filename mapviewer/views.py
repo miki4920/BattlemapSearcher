@@ -11,21 +11,20 @@ from .utility import get_map_query
 
 
 def get_seed(request):
-    if request.session.get('seed'):
-        seed = request.session.get('seed')
+    if request.COOKIES.get('seed'):
+        seed = request.COOKIES.get('seed')
     else:
         seed = random.randint(1, 1000)
-        request.session['seed'] = seed
-        request.session.set_expiry(0)
     random.seed(seed)
+    return seed
 
 
 def map_tiles(request):
-    get_seed(request)
     maps = []
     count = 0
     form = SearchForm()
     page = 1
+    seed = get_seed(request)
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -43,6 +42,8 @@ def map_tiles(request):
     back = False if page == 1 else True
     forward = True if CONFIG.MAPS_PER_PAGE*page < count else False
     context = {"maps": maps, "search_form": form, "back": back, "forward": forward}
+    request_render = render(request, 'mapviewer/map_tiles.html', context)
+    request_render.set_cookie("seed", seed)
     return render(request, 'mapviewer/map_tiles.html', context)
 
 
