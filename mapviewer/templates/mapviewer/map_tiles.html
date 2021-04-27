@@ -42,10 +42,10 @@
     {% endfor %}
     <footer>
         {% if back %}
-        <button type="submit" onclick="send_page(-1)"><</button>
+        <button type="submit" onclick="send_page(-1)" class="pagebutton" id="pagebuttonleft">Previous Page</button>
         {% endif %}
         {% if forward %}
-        <button type="submit" onclick="send_page(1)">></button>
+        <button type="submit" onclick="send_page(1)" class="pagebutton" id="pagebuttonright">Next Page</button>
         {% endif %}
     </footer>
 </div>
