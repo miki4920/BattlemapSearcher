@@ -1,14 +1,13 @@
 import re
+from io import BytesIO
 
+from PIL import Image
 from django.core.files.base import ContentFile
 from django.db import models
-from io import BytesIO
-from PIL import Image
 
 from .config import CONFIG
 from .errors import *
 from .hash import hash_picture, hash_distance
-from .config import CONFIG
 
 
 class TagManager(models.Manager):
@@ -110,6 +109,7 @@ def process_uploader(uploader):
 
 
 def attach_thumbnail(name, extension, thumbnail, battlemap):
+    name = f"{name}.{extension}"
     if extension == "jpg":
         extension = "JPEG"
     else:

@@ -22,7 +22,7 @@ class ExtensionNotAccepted(VerificationError):
 
 class PictureNotInRange(VerificationError):
     def __init__(self, image):
-        image_size = human_readable_size(len(image))
+        image_size = self.human_readable_size(len(image))
         self.message = f"03:Map Picture has wrong size:{image_size}"
         super().__init__(self.message)
 
