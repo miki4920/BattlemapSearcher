@@ -8,6 +8,7 @@ from django.forms.models import model_to_dict
 
 from .errors import VerificationError
 from .models import Map, MapBlacklist, Tag
+from .utility import get_map_or_404
 
 
 @csrf_exempt
@@ -37,15 +38,6 @@ def get_maps():
     return response
 
 
-def get_map_or_404(map_id):
-    try:
-        map_model = Map.objects.get(id=map_id)
-    except Map.DoesNotExist:
-        response = HttpResponse(status=404, content=f"Map {map_id} not in the database")
-        return response
-    return map_model
-
-
 def get_map(request, map_id):
     map_model = get_map_or_404(map_id)
     if isinstance(map_model, HttpResponse):
@@ -56,17 +48,6 @@ def get_map(request, map_id):
     map_model["tags"] = [str(tag) for tag in map_model["tags"]]
     map_model = json.dumps(map_model)
     response = HttpResponse(status=200, content=map_model, content_type="application/json")
-    return response
-
-
-def get_image(map_id):
-    map_model = get_map_or_404(map_id)
-    if isinstance(map_model, HttpResponse):
-        return map_model
-    response = HttpResponse(map_model.picture.read(), status=200)
-    extension = "png" if map_model.extension == "png" else "jpeg"
-    response['Content-Type'] = f'image/{extension}'
-    response['Content-Disposition'] = f'attachment; filename={map_model.name}.{map_model.extension}'
     return response
 
 
@@ -110,9 +91,10 @@ def put_map(request, map_id):
 
 
 def delete_map(map_id):
-    map_file = get_object_or_404(Map, id=map_id)
-    MapBlacklist.objects.create_map_black_list(map_file.hash)
-    map_file.delete()
-    response = HttpResponse()
-    response.status_code = 204
+    map_model = get_map_or_404(map_id)
+    if isinstance(map_model, HttpResponse):
+        return map_model
+    MapBlacklist.objects.create_map_black_list(map_model.hash)
+    map_model.delete()
+    response = HttpResponse(status=204)
     return response

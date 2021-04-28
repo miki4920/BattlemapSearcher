@@ -1,6 +1,17 @@
+from django.http import HttpResponse
+
 from .models import Map
 from django.db.models import Q
 from django.db import connection
+
+
+def get_map_or_404(map_id):
+    try:
+        map_model = Map.objects.get(id=map_id)
+    except Map.DoesNotExist:
+        response = HttpResponse(status=404, content=f"Map {map_id} not in the database")
+        return response
+    return map_model
 
 
 def get_map_query(text):

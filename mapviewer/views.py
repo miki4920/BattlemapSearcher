@@ -1,11 +1,12 @@
 import random
 
+from django.http import HttpResponse
 from django.shortcuts import render
 
 from .config import CONFIG
 from .forms import SearchForm
 from .models import Map
-from .utility import get_map_query
+from .utility import get_map_query, get_map_or_404
 
 
 def get_seed(request):
@@ -44,5 +45,15 @@ def map_tiles(request):
     request_render.set_cookie("seed", seed)
     return render(request, 'mapviewer/map_tiles.html', context)
 
+
+def get_picture(request, map_id):
+    map_model = get_map_or_404(map_id)
+    if isinstance(map_model, HttpResponse):
+        return map_model
+    response = HttpResponse(map_model.picture.read(), status=200)
+    extension = "png" if map_model.extension == "png" else "jpeg"
+    response['Content-Type'] = f'image/{extension}'
+    response['Content-Disposition'] = f'attachment; filename={map_model.name}.{map_model.extension}'
+    return response
 
 

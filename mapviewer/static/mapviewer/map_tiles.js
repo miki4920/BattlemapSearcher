@@ -22,7 +22,7 @@ function send_request(element, map_id) {
         a.download = filename ;
         a.click();
 	    }
-        xhttp.open("GET", "maps/"+map_id, true);
+        xhttp.open("GET", "maps/"+map_id+"/picture", true);
         xhttp.responseType = 'blob'
         xhttp.send();
     }
