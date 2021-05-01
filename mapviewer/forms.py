@@ -5,7 +5,7 @@ from django import forms
 
 class SearchForm(forms.Form):
     text = forms.CharField(label="", help_text="", widget=forms.TextInput(attrs={'placeholder': 'Search...', 'autocomplete': 'off', 'type': 'search', 'id': 'searchbartext'}), required=False)
-    page = forms.CharField(label="", help_text="", widget=forms.HiddenInput(attrs={'id': 'page_id'}))
+    page = forms.CharField(label="", help_text="", widget=forms.HiddenInput(attrs={'id': 'page_id', 'value': '1'}))
 
     def clean(self, *args):
         cleaned_data = super().clean()
