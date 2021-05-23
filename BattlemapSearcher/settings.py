@@ -27,7 +27,7 @@ MEDIA_URL = '/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
 
-ALLOWED_HOSTS = ["192.168.0.11"]
+ALLOWED_HOSTS = ["192.168.0.36"]
 
 # Application definition
 
@@ -77,8 +77,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'battlemaps',
-        'USER': 'mg448',
-        'PASSWORD': '12345678',
+        'USER': 'root',
+        'PASSWORD': 'Obibok4920$',
         'HOST': 'localhost',
         'PORT': '3306'
 
