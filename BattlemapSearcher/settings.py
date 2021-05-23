@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'BattlemapSearcher.urls'
@@ -84,9 +86,9 @@ DATABASES = {
 
     }
 }
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:18167'
-)
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:18167',
+]
 DATA_UPLOAD_MAX_MEMORY_SIZE = 50242880
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
