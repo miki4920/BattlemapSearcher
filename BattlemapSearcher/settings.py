@@ -85,9 +85,7 @@ DATABASES = {
 
     }
 }
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:18167',
-]
+CORS_ALLOW_ALL_ORIGINS = True
 DATA_UPLOAD_MAX_MEMORY_SIZE = 50242880
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
