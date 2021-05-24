@@ -17,6 +17,7 @@ class TagManager(models.Manager):
 
 
 class Tag(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=CONFIG.MAXIMUM_NAME_LENGTH)
     objects = TagManager()
 
@@ -171,6 +172,7 @@ class MapManager(models.Manager):
 
 
 class Map(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=CONFIG.MAXIMUM_NAME_LENGTH)
     extension = models.CharField(max_length=3)
     picture = models.ImageField(upload_to=CONFIG.UPLOAD_DIRECTORY)
@@ -192,5 +194,6 @@ class MapBlacklistManager(models.Manager):
 
 
 class MapBlacklist(models.Model):
+    id = models.AutoField(primary_key=True)
     hash = models.CharField(max_length=16)
     objects = MapBlacklistManager()

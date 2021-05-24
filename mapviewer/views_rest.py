@@ -43,9 +43,13 @@ def get_map(request, map_id):
     if isinstance(map_model, HttpResponse):
         return map_model
     map_model = model_to_dict(map_model)
-    map_model["picture"] = request.get_host() + map_model["picture"].url
-    map_model["thumbnail"] = request.get_host() + map_model["thumbnail"].url
+    map_model["file_name"] = "_".join(map_model["name"].lower().split(" ")) + "." + map_model["extension"]
+    map_model["grid_size"] = int(map_model["width"]/map_model["square_width"]) if map_model["square_width"] else None
+    map_model["file_link"] = "http://" + request.get_host() + map_model["picture"].url
+    map_model["thumbnail_link"] = "http://" + request.get_host() + map_model["thumbnail"].url
     map_model["tags"] = [str(tag) for tag in map_model["tags"]]
+    del map_model["picture"]
+    del map_model["thumbnail"]
     map_model = json.dumps(map_model)
     response = HttpResponse(status=200, content=map_model, content_type="application/json")
     return response

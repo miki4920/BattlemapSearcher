@@ -1,6 +1,13 @@
-{% extends "mapviewer/base.html" %}
-{% block content %}
-<div class="maps">
+<html lang="en">
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'mapviewer/style.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'mapviewer/favicon.ico' %}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Battlemap Viewer</title>
+</head>
+<body>
+    <div class="maps">
     <div id="searchbar">
         <div class="background">
             <form action="http://192.168.0.36" method="post" id="searchform">
@@ -19,7 +26,7 @@
         <div class="box">
             <div class="blur">
                 <a href={{map.picture}}>
-                    <img src={{map.thumbnail}} alt="map">
+                    <img src={{map.thumbnail}} alt={{map.name}}>
                     <p class="desc" id="{{map.id}} desc">Title: {{map.name}}<br>
                         {% if map.square_width %}Square Width: {{map.square_width}}
                         {% else %}Width: {{map.width}}{% endif %}<br>
@@ -51,5 +58,6 @@
 </div>
 {% load static %}
 <script src="{% static 'mapviewer/map_tiles.js' %}"></script>
-{% endblock %}
-
+<script src="{% static 'mapviewer/base.js' %}"></script>
+</body>
+</html>
