@@ -54,7 +54,9 @@ function send_request(element, map_id) {
             }
         }
        }
+
     }
+    //TODO: Add a handling for request type "Forge"
 }
 
 function send_page(increment) {

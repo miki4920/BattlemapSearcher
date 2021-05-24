@@ -57,3 +57,4 @@ def get_picture(request, map_id):
     return response
 
 
+# TODO: add a code for fetching image link

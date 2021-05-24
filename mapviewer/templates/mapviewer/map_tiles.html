@@ -10,13 +10,13 @@
     <div class="maps">
     <div id="searchbar">
         <div class="background">
-            <form action="http://192.168.0.36" method="post" id="searchform">
+            <form action="http://192.168.0.11" method="post" id="searchform">
                 {% csrf_token %}
                 {{search_form}}
                 <input type="hidden" id="previous_value" value="">
-                <button type="submit" id="searchicon" class="buttonicon"></button>
-                <button type="button" id="homeicon" class="buttonicon"></button>
-                <button type="button" id="refreshicon" class="buttonicon"></button>
+                <button type="submit" class="buttonicon" id="searchicon" ></button>
+                <button type="button" class="buttonicon" id="homeicon" ></button>
+                <button type="button" class="buttonicon" id="refreshicon" ></button>
             </form>
             <form action="" method="get" id="homeform"></form>
         </div>
@@ -37,25 +37,37 @@
                 </a>
                 <div class="buttons">
                 <button type="submit" onclick="send_request(this, {{map.id}})" id="download">Download</button>
-                    <hr>
                 <button type="submit" onclick="send_request(this, {{map.id}})" id="tags">Tags</button>
-                    <hr>
                 <button type="submit" onclick="send_request(this, {{map.id}})" id="delete">Delete</button>
+                <!--TODO: Add a button for fetching foundry ip -->
                 <div id="response"></div>
                 </div>
             </div>
         </div>
     </div>
     {% endfor %}
-    <footer>
-        {% if back %}
-        <button type="submit" onclick="send_page(-1)" class="pagebutton" id="pagebuttonleft">Previous Page</button>
-        {% endif %}
-        {% if forward %}
-        <button type="submit" onclick="send_page(1)" class="pagebutton" id="pagebuttonright">Next Page</button>
-        {% endif %}
-    </footer>
+
 </div>
+{% if back or forward %}
+<footer>
+        <button type="submit" onclick="send_page(-1)" class="pagebutton" id="pagebuttonleft">Previous Page</button>
+        {% if back %}
+            <style>
+                #pagebuttonleft {
+                    opacity: 1;
+                }
+            </style>
+        {% endif %}
+        <button type="submit" onclick="send_page(1)" class="pagebutton" id="pagebuttonright">Next Page</button>
+        {% if forward %}
+            <style>
+                #pagebuttonright {
+                    opacity: 1;
+                }
+            </style>
+        {% endif %}
+</footer>
+{% endif %}
 {% load static %}
 <script src="{% static 'mapviewer/map_tiles.js' %}"></script>
 <script src="{% static 'mapviewer/base.js' %}"></script>

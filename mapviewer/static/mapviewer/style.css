@@ -1,268 +1,223 @@
 {% load static %}
 
 * {
-  box-sizing: border-box;
-}
-
-html,body {
-  margin: 0; padding: 0;
+    box-sizing: border-box;
+    font-size: 1em;
 }
 
 body {
-  background-color: rgb(18, 18, 18);
+    background-color: rgb(18, 18, 18);
 }
 
 #searchbar {
-  background-color: rgb(18, 18, 18);
-  z-index: 2;
-  padding: 0px 0px;
-  margin: 4px;
-  width: 100%;
-  border-radius: 8px;
+    background-color: rgb(18, 18, 18);
+    z-index: 2;
+    width: 100%;
+    margin: 0 4px;
+    border-radius: 8px;
 }
 
 .sticky {
-  position: sticky;
-  top: 0;
+    position: sticky;
+    top: 0;
 }
 
 .background {
-  padding: 8px;
-  border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.05);
-  width: 100%;
-}
-
-.background + .sticky {
-    z-index: 5;
-    padding: 0px;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 form {
-  margin-bottom: 0;
-  display:flex;
+    margin-bottom: 0;
+    display: flex;
 }
 
-#searchbar input{
-  width: 100%;
-  display: inline-block;
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: rgba(255, 255, 255, 0.05);
-  text: rgba(255, 255, 255, 0.87);
-  border-top: none;
-  border-bottom: none;
-  border-left: none;
-  border-right: none;
-  border-radius: 4px 0px 0px 4px;
-  padding: 2px 8px;
+#searchbar input {
+    flex-basis: 80%;
+    flex-grow: 1;
+    font-size: 1.17em;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: rgba(255, 255, 255, 0.05);
+    border: none;
+    border-radius: 4px 0 0 4px;
+    padding: 2px 4px;
 }
 
-#searchbar input:focus{
-  background-color: rgba(255, 255, 255, 0.11);
-  outline: none;
+#searchbar input:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.09);
+}
+
+#searchbar input:focus {
+    background-color: rgba(255, 255, 255, 0.09);
+    outline: none;
 }
 
 .buttonicon {
-    padding-top: auto;
-    position: relative;
-    border-top: none;
-    border-bottom: none;
-    border-left: none;
-    border-right: none;
-    width: 2%;
+    flex-grow: 1;
+    border: none;
     cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.05);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.buttonicon:hover {
+    background-color: rgba(255, 255, 255, 0.09);
+}
+
+.buttonicon:focus {
+    background-color: rgba(255, 255, 255, 0.09);
+    outline: none;
 }
 
 #homeicon {
-  background: url("/static/mapviewer/home.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 0px 4px 4px 0px;
-
-}
-
-#homeicon:focus {
-  background-color: rgba(255, 255, 255, 0.11);
-  outline: none;
+    background-image: url("/static/mapviewer/home.png");
 }
 
 #searchicon {
-  background: url("/static/mapviewer/search.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-#searchicon:focus {
-  background-color: rgba(255, 255, 255, 0.11);
-  outline: none;
+    background-image: url("/static/mapviewer/search.png");
 }
 
 #refreshicon {
-  background: url("/static/mapviewer/refresh.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-#refreshicon:focus {
-  background-color: rgba(255, 255, 255, 0.11);
-  outline: none;
+    background-image: url("/static/mapviewer/refresh.png");
+    border-radius: 0 4px 4px 0;
 }
 
 .maps {
-  display: flex;
-  flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .map {
-  padding: 4px 4px;
-  width: 12.49999%;
+    width: 12.5%;
+    padding: 4px;
 }
 
 @media screen and (max-width: 1600px) {
-  .map {
-    width: 24.99999%;
-  }
+    .map {
+        width: 25%;
+    }
 }
 
 @media screen and (max-width: 1300px) {
-  .map {
-    width: 49.99999%;
-  }
+    .map {
+        width: 50%;
+    }
 }
 
 @media screen and (max-width: 1000px) {
-  .map {
-    width: 99.99999%;
-  }
-  .buttonicon {
-    width: 10%;
-  }
-  * {
-    font-size: 30px;
-  }
-  #searchbar input{
-    font-size: 48px;
-  }
-  .buttons {
-    padding: 10px 0px 0px 0px;
-  }
+    .map {
+        width: 100%;
+    }
+    * {
+        font-size: 1.17em;
+    }
+    .buttonicon {
+        flex-basis: 10%;
+    }
 }
 
-
 .box {
-  background-color: rgba(255, 255, 255, 0.05);
-  height: 100%;
-  padding: 8px;
-  border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+    height: 100%;
+    padding: 8px;
+    border-radius: 8px;
 }
 
 .box:hover {
-  background-color: rgba(255, 255, 255, 0.11);
-  transition: .3s ease-in;
+    background-color: rgba(255, 255, 255, 0.11);
+    transition: .1s ease-in;
 }
 
 .blur {
-  overflow: hidden;
-  position: relative;
-}
-
-.buttons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-hr {
-  opacity: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    border-radius: 4px;
 }
 
 .box img {
-  object-fit: cover;
-  width: 100%;
-  height: auto;
-  border-radius: 4px;
+    object-fit: cover;
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
 }
 
-.box:hover img{
-  filter: blur(3px);
-  opacity: 0.3;
-  transition: .3s ease-in;
+.box:hover img {
+    filter: blur(3px);
+    opacity: 0.3;
+    transition: .1s ease-in;
 }
 
 .desc {
     color: rgba(255, 255, 255, 0.87);
     position: absolute;
-    z-index: 1;
-    margin: 0px 0px;
+    margin: 0;
     left: 0;
     right: 0;
-    top: 0%;
+    top: 0;
     text-align: left;
-    width: 100%;
     opacity: 0;
     padding: 4px 4px;
 }
 
-.box button {
+.buttons {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
+.buttons button {
+    flex-basis: 33%;
     color: rgba(255, 255, 255, 0.87);
     border: none;
     background-color: rgba(255, 255, 255, 0.09);
     border-radius: 4px;
-    width: 32.2%;
     opacity: 0;
     cursor: pointer;
 }
 
-.box button:focus {
+.buttons button:hover {
+    background-color: rgba(255, 255, 255, 0.16);
+}
+
+.buttons button:focus {
     outline: none;
 }
 
-.box:hover .desc{
-  opacity: 1;
-  transition: .3s ease-in;
+.box:hover .desc {
+    opacity: 1;
+    transition: .3s ease-in;
 }
 
-.box:hover button{
-  opacity: 1;
-  transition: .3s ease-in;
-}
-
-.box button:hover {
-  background-color: rgba(255, 255, 255, 0.16);
+.box:hover button {
+    opacity: 1;
+    transition: .3s ease-in;
 }
 
 footer {
-  width: 100%;
-  height: 5%;
-  background-color: rgba(255, 255, 255, 0.05);
-  padding: 4px;
+    display: flex;
+    justify-content: space-between;
+    background-color: rgba(255, 255, 255, 0.05);
+    margin: 0 4px;
+    border-radius: 4px;
 }
 
 .pagebutton {
-  color: rgba(255, 255, 255, 0.87);
-  border: none;
-  background-color: rgba(255, 255, 255, 0.09);
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 4px;
+    color: rgba(255, 255, 255, 0.87);
+    border: none;
+    background-color: rgba(255, 255, 255, 0.09);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 4px;
+    opacity: 0;
 }
 
 .pagebutton:hover {
-  background-color: rgba(255, 255, 255, 0.16);
-}
-
-#pagebuttonleft {
-  float: left;
-}
-
-#pagebuttonright {
-  float: right;
+    background-color: rgba(255, 255, 255, 0.16);
 }
