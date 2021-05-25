@@ -49,6 +49,3 @@ def get_picture(request, map_id):
     response['Content-Type'] = f'image/{extension}'
     response['Content-Disposition'] = f'attachment; filename={map_model.name}.{map_model.extension}'
     return response
-
-
-# TODO: add a code for fetching image link

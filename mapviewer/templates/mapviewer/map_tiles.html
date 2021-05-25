@@ -32,9 +32,9 @@
                 </a>
                 <div class="buttons">
                 <button type="button"><a href="{{ map.picture.url }}" download>Download</a></button>
-                <button type="submit" onclick="send_request(this, {{map.id}})" id="tags">Tags</button>
-                <button type="submit" onclick="send_request(this, {{map.id}})" id="delete">Delete</button>
-                <!--TODO: Add a button for fetching foundry ip -->
+                <button type="submit" onclick="send_request(this, {{map.id}}, 0)">Foundry</button>
+                <button type="submit" onclick="send_request(this, {{map.id}}, 1)">Tags</button>
+                <button type="submit" onclick="send_request(this, {{map.id}}, 2)">Delete</button>
                 <div id="response"></div>
                 </div>
             </div>
