@@ -1,48 +1,20 @@
 function send_request(element, map_id) {
-    //TODO: Refactor how sending requests work
-    var xhttp = new XMLHttpRequest();
-    var request_type = element.id;
-    var response=document.getElementById("response");
-    if (request_type === "download") {
-        xhttp.onload =function(){
-        var filename = "";
-        var disposition = xhttp.getResponseHeader('Content-Disposition');
-        if (disposition && disposition.indexOf('attachment') !== -1) {
-            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-            var matches = filenameRegex.exec(disposition);
-            if (matches != null && matches[1]) {
-              filename = matches[1].replace(/['"]/g, '');
-            }
-        }
-        var blob = this.response;
-	    var a = document.createElement("a");
-    	var blobUrl = window.URL.createObjectURL(new Blob([blob], {type: blob.type}));
-        document.body.appendChild(a);
-        a.style = "display: none";
-        a.href = blobUrl;
-        a.download = filename ;
-        a.click();
-	    }
-        xhttp.open("GET", "maps/"+map_id+"/picture", true);
-        xhttp.responseType = 'blob'
-        xhttp.send();
-    }
-
-    else if (request_type === "delete") {
+    let xhttp = new XMLHttpRequest();
+    let request_type = element.id;
+    if (request_type === "delete") {
         xhttp.open("DELETE", "maps/"+map_id, true)
         xhttp.send();
         xhttp.onload =function(){
         if (xhttp.status === 204) {
-            var map_tile = document.getElementById(map_id);
-            map_tile.remove();
+            document.getElementById(map_id).remove();
             }
         }
     }
     else if (request_type === "tags") {
-       var tags = prompt("Enter Map Tags", "");
-       var description = null;
-       var index = null;
-       if (!(tags == null || tags == "")) {
+       let tags = prompt("Enter Map Tags");
+       let description = null;
+       let index = null;
+       if (!(tags == null || tags === "")) {
             xhttp.open("PUT", "maps/"+map_id, true)
             xhttp.send(tags);
             xhttp.onload =function(){
@@ -79,6 +51,17 @@ function send_page(increment) {
         query_parameters.set("page", "2");
     }
     window.location = `${location.pathname}?${query_parameters}`;
+}
+
+window.onscroll = function() {addSticky()};
+var searchbar = document.getElementById("searchbar");
+var sticky = searchbar.offsetTop;
+function addSticky() {
+  if (window.pageYOffset >= sticky) {
+    searchbar.classList.add("sticky")
+  } else {
+    searchbar.classList.remove("sticky");
+  }
 }
 
 $(document).ready(function(){

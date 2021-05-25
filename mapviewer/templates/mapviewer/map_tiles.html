@@ -31,7 +31,7 @@
                         Tags: {% for tag in map.tags.all|dictsort:"name" %}{{tag.name|title}}, {% endfor %}</p>
                 </a>
                 <div class="buttons">
-                <button type="submit" onclick="send_request(this, {{map.id}})" id="download">Download</button>
+                <button type="button"><a href="{{ map.picture.url }}" download>Download</a></button>
                 <button type="submit" onclick="send_request(this, {{map.id}})" id="tags">Tags</button>
                 <button type="submit" onclick="send_request(this, {{map.id}})" id="delete">Delete</button>
                 <!--TODO: Add a button for fetching foundry ip -->
@@ -65,6 +65,5 @@
 {% endif %}
 {% load static %}
 <script src="{% static 'mapviewer/map_tiles.js' %}"></script>
-<script src="{% static 'mapviewer/base.js' %}"></script>
 </body>
 </html>
