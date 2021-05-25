@@ -1,13 +1,3 @@
-function addSticky() {
-    let searchbar = document.getElementById("searchbar");
-    let sticky = searchbar.offsetTop;
-    if (window.pageYOffset >= sticky) {
-        searchbar.classList.add("sticky")
-    } else {
-        searchbar.classList.remove("sticky");
-    }
-}
-
 function send_request(element, map_id, code) {
     let xhttp = new XMLHttpRequest();
     if (code === 0) {
@@ -60,7 +50,12 @@ function get_search() {
 
 function send_page(increment) {
     const query_parameters = new URLSearchParams(location.search);
-    query_parameters.set("search", query_parameters.get("search"));
+    if(query_parameters.has("search")) {
+         query_parameters.set("search", query_parameters.get("search"));
+    }
+   else {
+        query_parameters.set("search", "");
+    }
     if (query_parameters.has("page")) {
         let page = parseInt(query_parameters.get("page"));
         query_parameters.set("page", (page + increment).toString());
@@ -69,10 +64,6 @@ function send_page(increment) {
     }
     window.location = `${location.pathname}?${query_parameters}`;
 }
-
-window.onscroll = function () {
-    addSticky()
-};
 
 $(document).ready(function () {
     $("#searchicon").on('click touchstart', function () {

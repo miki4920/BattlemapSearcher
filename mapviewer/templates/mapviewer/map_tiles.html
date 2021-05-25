@@ -7,7 +7,6 @@
     <title>Battlemap Viewer</title>
 </head>
 <body>
-    <div class="maps">
     <div id="searchbar">
         <div class="background">
             {% csrf_token %}
@@ -16,6 +15,7 @@
             <button type="button" class="buttonicon" id="refreshicon" ></button>
         </div>
     </div>
+    <div class="maps">
     {% for map in maps %}
     <div class="map" id="{{map.id}}">
         <div class="box">
@@ -31,11 +31,10 @@
                         Tags: {% for tag in map.tags.all|dictsort:"name" %}{{tag.name|title}}, {% endfor %}</p>
                 </a>
                 <div class="buttons">
-                <button type="button"><a href="{{ map.picture.url }}" download>Download</a></button>
+                <a href="{{ map.picture.url }}" download>Download</a>
                 <button type="submit" onclick="send_request(this, {{map.id}}, 0)">Foundry</button>
                 <button type="submit" onclick="send_request(this, {{map.id}}, 1)">Tags</button>
                 <button type="submit" onclick="send_request(this, {{map.id}}, 2)">Delete</button>
-                <div id="response"></div>
                 </div>
             </div>
         </div>

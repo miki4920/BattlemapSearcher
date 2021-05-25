@@ -38,14 +38,3 @@ def map_tiles(request):
     request_render = render(request, 'mapviewer/map_tiles.html', context)
     request_render.set_cookie("seed", seed)
     return request_render
-
-
-def get_picture(request, map_id):
-    map_model = get_map_or_404(map_id)
-    if isinstance(map_model, HttpResponse):
-        return map_model
-    response = HttpResponse(map_model.picture.read(), status=200)
-    extension = "png" if map_model.extension == "png" else "jpeg"
-    response['Content-Type'] = f'image/{extension}'
-    response['Content-Disposition'] = f'attachment; filename={map_model.name}.{map_model.extension}'
-    return response
