@@ -2,7 +2,7 @@ function send_request(element, map_id, code) {
     let xhttp = new XMLHttpRequest();
     if (code === 0) {
         let temp_input = document.createElement("input");
-        temp_input.value = "http//:" + window.location.hostname + "/maps/" + map_id;
+        temp_input.value = "http://" + window.location.hostname + "/maps/" + map_id;
         document.body.appendChild(temp_input);
         temp_input.select();
         document.execCommand("copy");
