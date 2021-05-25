@@ -127,7 +127,7 @@ body {
 }
 
 .box:hover {
-    background-color: rgba(255, 255, 255, 0.11);
+    background-color: rgba(255, 255, 255, 0.09);
     transition: .1s ease-in;
 }
 
@@ -147,7 +147,7 @@ body {
 }
 
 .box:hover img {
-    filter: blur(3px);
+    filter: blur(3px) brightness(50%);
     opacity: 0.3;
     transition: .1s ease-in;
 }
@@ -186,7 +186,7 @@ body {
     text-decoration: none;
 }
 
-.buttons button:hover, a:hover {
+.buttons button:hover, .buttons a:hover {
     background-color: rgba(255, 255, 255, 0.16);
 }
 
