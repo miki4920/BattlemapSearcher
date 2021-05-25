@@ -1,4 +1,5 @@
 function send_request(element, map_id) {
+    //TODO: Refactor how sending requests work
     var xhttp = new XMLHttpRequest();
     var request_type = element.id;
     var response=document.getElementById("response");
@@ -59,47 +60,43 @@ function send_request(element, map_id) {
     //TODO: Add a handling for request type "Forge"
 }
 
+function get_search() {
+    const query_parameters = new URLSearchParams(location.search);
+    const search = document.getElementById("searchbartext").value;
+    query_parameters.set("search", search);
+    query_parameters.set("page", "1");
+    window.location = `${location.pathname}?${query_parameters}`;
+}
+
 function send_page(increment) {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    var form = document.getElementById("searchform");
-    var page = document.getElementById("page_id");
-    var page_id = 1;
-    if (page.value) {
-      page_id = parseInt(page.value);
+    const query_parameters = new URLSearchParams(location.search);
+    query_parameters.set("search", query_parameters.get("search"));
+    if(query_parameters.has("page")) {
+        let page = parseInt(query_parameters.get("page"));
+        query_parameters.set("page", (page+increment).toString());
     }
-    page_id = page_id + parseInt(increment);
-    page.value = page_id;
-    form.submit();
+    else {
+        query_parameters.set("page", "2");
+    }
+    window.location = `${location.pathname}?${query_parameters}`;
 }
 
 $(document).ready(function(){
-  $("#homeicon").on('click touchstart', function() {
-      var form = document.getElementById("searchform");
-      var search = document.getElementById("searchbartext");
-      search.value = "";
-      var page = document.getElementById("page_id");
-      page.value = 1;
-      form.submit();
+  $("#searchicon").on('click touchstart', function() {
+      get_search();
   });
 });
+
+window.addEventListener("keydown", function(event) {
+    if(event.key === "Enter") {
+        get_search();
+    }
+}, true);
 
 $(document).ready(function(){
   $("#refreshicon").on('click touchstart', function() {
       var seed = Math.floor(Math.random() * 1000)+1;
       document.cookie = "seed="+seed.toString();
-      var form = document.getElementById("searchform");
-      form.submit();
+      location.reload();
   });
-});
-
-$('#searchform').submit(function() {
-    var search = document.getElementById("searchbartext");
-    var previous_value = document.getElementById("previous_value");
-    var page = document.getElementById("page_id");
-    if (search != previous_value) {
-        page.value = 1;
-        previous_value = search;
-    }
-    return true;
 });

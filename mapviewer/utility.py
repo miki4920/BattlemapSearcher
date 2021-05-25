@@ -1,3 +1,5 @@
+import re
+
 from django.http import HttpResponse
 
 from .models import Map
@@ -15,7 +17,7 @@ def get_map_or_404(map_id):
 
 
 def get_map_query(text):
-    maps = list((get_name_uploader_query(text) | get_tag_query(text)).distinct())
+    maps = (get_name_uploader_query(text) | get_tag_query(text)).distinct()
     return maps
 
 
@@ -54,3 +56,8 @@ def get_tag_query(text):
     return maps
 
 
+def clean_search(text):
+    text = re.sub("[^a-zA-Z0-9 \"]", "", text)
+    text = text.lower()
+    text = text.split(" ")
+    return text

@@ -10,15 +10,10 @@
     <div class="maps">
     <div id="searchbar">
         <div class="background">
-            <form action="http://192.168.0.11" method="post" id="searchform">
-                {% csrf_token %}
-                {{search_form}}
-                <input type="hidden" id="previous_value" value="">
-                <button type="submit" class="buttonicon" id="searchicon" ></button>
-                <button type="button" class="buttonicon" id="homeicon" ></button>
-                <button type="button" class="buttonicon" id="refreshicon" ></button>
-            </form>
-            <form action="" method="get" id="homeform"></form>
+            {% csrf_token %}
+            <input type="search" name="text" placeholder="Search..." autocomplete="off" id="searchbartext">
+            <button type="submit" class="buttonicon" id="searchicon"></button>
+            <button type="button" class="buttonicon" id="refreshicon" ></button>
         </div>
     </div>
     {% for map in maps %}
@@ -54,7 +49,7 @@
         {% if back %}
             <style>
                 #pagebuttonleft {
-                    opacity: 1;
+                    visibility: visible;
                 }
             </style>
         {% endif %}
@@ -62,7 +57,7 @@
         {% if forward %}
             <style>
                 #pagebuttonright {
-                    opacity: 1;
+                    visibility: visible;
                 }
             </style>
         {% endif %}
