@@ -228,3 +228,7 @@ footer {
 #pagebuttonright {
     border-radius: 0 16px 0 0;
 }
+
+form {
+    display: none;
+}

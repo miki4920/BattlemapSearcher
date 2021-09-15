@@ -32,6 +32,8 @@
                 </a>
                 <div class="buttons">
                 <a href="{{ map.picture.url }}" download>Download</a>
+                <form action="/" method="post">
+                </form>
                 <button type="submit" onclick="send_request(this, {{map.id}}, 0)">Foundry</button>
                 <button type="submit" onclick="send_request(this, {{map.id}}, 1)">Tags</button>
                 <button type="submit" onclick="send_request(this, {{map.id}}, 2)">Delete</button>
