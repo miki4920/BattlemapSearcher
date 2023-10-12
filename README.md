@@ -4,7 +4,7 @@
 
 BattlemapSearcher-Django is a single page application developed to facilitate the search for battlemaps seamlessly.
 
-![BattlemapsSearcher](https://raw.githubusercontent.com/miki4920/BattlemapSearcher-Django/main/BattlemapsSearcher.gif)
+![BattlemapsSearcher](https://raw.githubusercontent.com/miki4920/BattlemapSearcher-Flask/main/BattlemapsSearcher.gif)
 
 The project is bifurcated into two main segments:
 
